@@ -12,7 +12,7 @@ def import_data():
     url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
     cdr_fyi = pd.read_csv(url, decimal=",")
 
-    cdr_fyi["Total price (USD)"].replace(0.0, np.NaN, inplace=True)
+    cdr_fyi["Total price (USD)"] = cdr_fyi["Total price (USD)"].replace(0.0, np.nan)
     cdr_fyi["Price per Ton"] = cdr_fyi["Total price (USD)"] / cdr_fyi["Tons Purchased"]
     cdr_fyi["Announcement Date"] = cdr_fyi["Announcement Date"].str.split(" ", n=1).str[0]
     cdr_fyi.rename(columns={"Tons Purchased": "Tons Purchased/Sold"}, inplace=True)

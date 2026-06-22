@@ -1,4 +1,27 @@
-.venv
-.vscode
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDEs / editors
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local exploratory notebooks (kept out of deploy; tracked copies live in EDA/)
 Extract Data Tests.ipynb
 Plots.ipynb
