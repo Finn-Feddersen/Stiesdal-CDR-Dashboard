@@ -1,21 +1,14 @@
 # Import Statements
 import pandas as pd
 import numpy as np
+import os
 
 # Importing Data
 def import_data():
 
-    SHEET_ID = '1BH_B_Df_7e2l6AH8_8a0aK70nlAJXfCTwfyCgxkL5C8'
-    SHEET_NAME = 'cdr.fyi_raw'
-    SHEET_NAME1 = 'Main sheet (merged with cdr.fyi)'
-    SHEET_NAME2 = 'List of revisions'
-    url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
-    cdr_fyi = pd.read_csv(url, decimal=",")
-
-    # cdr.fyi gated the sheet and prepended a notice to the first column header;
-    # normalize it back to "Announcement Date" so the rest of the pipeline works.
-    cdr_fyi = cdr_fyi.rename(columns={cdr_fyi.columns[0]: "Announcement Date"})
-
+    DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "cdr_fyi_raw.csv")
+    cdr_fyi = pd.read_csv(DATA_PATH, decimal=",")
+    
     cdr_fyi["Total price (USD)"] = cdr_fyi["Total price (USD)"].replace(0.0, np.nan)
     cdr_fyi["Price per Ton"] = cdr_fyi["Total price (USD)"] / cdr_fyi["Tons Purchased"]
     cdr_fyi["Announcement Date"] = cdr_fyi["Announcement Date"].str.split(" ", n=1).str[0]

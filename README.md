@@ -6,7 +6,15 @@ Built for [Stiesdal](https://www.stiesdal.com/) to track market activity in the 
 
 **Original demo:** https://stiesdal-cdr-dashboard.onrender.com/
 
-> ⚠️ **The live demo is no longer functional.** The dashboard read its data live from a public [cdr.fyi](https://www.cdr.fyi/) Google Sheet. That feed has since been gated — the public export is now a frozen snapshot (data through Dec 31, 2023) with a different layout — so the app can no longer load it. This repository is preserved as a portfolio reference documenting how the dashboard was built.
+> ⚠️ **The hosted demo is no longer live.** The dashboard originally read its data live from a public [cdr.fyi](https://www.cdr.fyi/) Google Sheet, which has since been gated. A frozen snapshot of that data (2,384 records through Dec 2023) is included in [`data/cdr_fyi_raw.csv`](data/cdr_fyi_raw.csv) so the app can still be run locally — see [Running with the offline snapshot](#running-with-the-offline-snapshot).
+
+### Screenshots
+
+![CDR dashboard — all methods](docs/cdr-dashboard-all-methods.png)
+*Full market view across all CDR methods.*
+
+![CDR dashboard — single method](docs/cdr-dashboard-biochar.png)
+*Filtered to a single method (Biochar).*
 
 ---
 
@@ -83,6 +91,27 @@ python app.py
 ```
 
 Then open http://localhost:8051 in your browser.
+
+> Note: with the cdr.fyi sheet gated, the live fetch in `src/components/_01_import_cdr.py` no longer returns usable data — see the offline option below.
+
+## Running with the offline snapshot
+
+To run the dashboard against the bundled snapshot (`data/cdr_fyi_raw.csv`), point the data loader at the local file instead of the Google Sheet. In `src/components/_01_import_cdr.py`, replace the sheet-fetch lines:
+
+```python
+# before — live cdr.fyi sheet (now gated)
+SHEET_ID = '1BH_B_Df_7e2l6AH8_8a0aK70nlAJXfCTwfyCgxkL5C8'
+SHEET_NAME = 'cdr.fyi_raw'
+url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
+cdr_fyi = pd.read_csv(url, decimal=",")
+
+# after — bundled offline snapshot
+import os
+DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "cdr_fyi_raw.csv")
+cdr_fyi = pd.read_csv(DATA_PATH, decimal=",")
+```
+
+Everything downstream (cleaning, charts, callbacks) is unchanged. The snapshot is the gated sheet's frozen export with its header normalized back to `Announcement Date` and empty tonnage cells set to `0` so the totals compute. The screenshots above were produced this way.
 
 ## Deployment
 

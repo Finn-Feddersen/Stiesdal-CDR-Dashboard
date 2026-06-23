@@ -1,7 +1,9 @@
 from dash import Dash
 from dash_bootstrap_components.themes import BOOTSTRAP
 
-from components._01_import_cdr import import_data
+# Data source — pick one:
+from components._01_import_cdr_csv import import_data   # offline snapshot (data/cdr_fyi_raw.csv)
+# from components._01_import_cdr import import_data     # live cdr.fyi Google Sheet
 from components._02_layout import create_layout
 
 data = import_data()

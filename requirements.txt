@@ -3,10 +3,12 @@ dash==2.9.3
 dash_bootstrap_components==1.4.1
 
 # Plotting / data
-plotly
-pandas
-numpy
+plotly==5.14.1
+pandas==1.5.3
+numpy==1.24.4
 python-dateutil
 
 # Production server (used by Render: gunicorn --chdir src app:server)
 gunicorn
+
+setuptools<81
